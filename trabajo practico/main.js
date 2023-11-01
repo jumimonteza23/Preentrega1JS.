@@ -18,7 +18,7 @@ for(let j = 3000; j <= 3000; j++) {
 
 let saludo = prompt("Gracias por preferirnos, estas son nuestras actividades");
 function actividades() {
-let actividad = prompt("ingresa el numero de la actividad que quieres realizar 1-Trekking 2-Tirolesa");
+let actividad = prompt("ingresa el `numero` de la actividad que quieres realizar 1-Trekking 2-Tirolesa");
 if(actividad === "1"){
     alert("elegiste Trekking");
 }else if(actividad === "2"){
@@ -49,7 +49,3 @@ if (solicitud === 'trekking') {
     alert(`Salida: ${tirolesa.salida}, Día: ${tirolesa.dia}, Hora: ${tirolesa.hora}`);
 }else
 alert("Solicitud no válida. Por favor, ingresa 'trekking'o`tirolesa` para conocer el itinerario.");
-
-
-
-
