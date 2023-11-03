@@ -4,19 +4,19 @@ const actividades = [
         id: 1,
         nombre: "tirolesa",
         precio: 5000,
-        imagen: "./imagenes/pizzas/muzzarella.jpg",
+        imagen: "./img/tirolesa.jpg",
     },
     {
         id: 2,
         nombre: "trekking",
         precio: 5000,
-        imagen: "",
+        imagen: "./img/trekking.jpg",
     },
     {
         id: 3,
         nombre: "mountain bike",
         precio: 5000,
-        imagen: "./imagenes/pizzas/napolitana.jpg",
+        imagen: "./img/m.bike.jpg",
     },
 ];
 
@@ -70,6 +70,7 @@ function mostrarMisActividadesEnHTML() {
             cardActividad.classList.add("card-carrito");
             cardActividad.innerHTML = `
                     <img src="${actividad.imagen}" alt="">
+                    
                     <div>
                         <p>Actividad</p>
                         <p>${actividad.nombre}</p>
