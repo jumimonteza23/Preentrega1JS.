@@ -1,51 +1,221 @@
-let nombre = prompt("ingresa tu nombre");
-let apellido = prompt("ingresa tu apellido");
-    alert(`Hola ${nombre} ${apellido}`);
+// Array de actividade
+const actividades = [
+    {
+        id: 1,
+        nombre: "tirolesa",
+        precio: 5000,
+        imagen: "./imagenes/pizzas/muzzarella.jpg",
+    },
+    {
+        id: 2,
+        nombre: "trekking",
+        precio: 5000,
+        imagen: "",
+    },
+    {
+        id: 3,
+        nombre: "mountain bike",
+        precio: 5000,
+        imagen: "./imagenes/pizzas/napolitana.jpg",
+    },
+];
 
-let noches = (prompt("ingrese los dias de hospedaje para conocer los beneficios"))
-if (noches <= 2){
-    alert ("sin beneficios");
-}else if(noches <= 7){
-    alert("tienes el desyuno incluido");
-}else{
-    alert("tienes el desayuno y tres cenas a elección GRATIS!");
-}
-let importe = Number(prompt("confirme los dias de hospedaje para calcular el importe total"));
-for(let j = 3000; j <= 3000; j++) {
-    let resultado = importe * j;
-    alert(`${importe} * ${j} = ${resultado}`);
+// Inicializar el carrito desde el almacenamiento local
+let misActividades = JSON.parse(localStorage.getItem('misActividades')) || [];
+
+// Función para guardar el carrito en el almacenamiento local
+function guardarMisActividadesEnLocalStorage() {
+    localStorage.setItem('misActividades', JSON.stringify(misActividades));
 }
 
-let saludo = prompt("Gracias por preferirnos, estas son nuestras actividades");
-function actividades() {
-let actividad = prompt("ingresa el `numero` de la actividad que quieres realizar 1-Trekking 2-Tirolesa");
-if(actividad === "1"){
-    alert("elegiste Trekking");
-}else if(actividad === "2"){
-    alert("elegiste Tirolesa");
-}else {
-    alert("ingresa solo el numero 1 o 2");
-    let actividad = prompt("ingresa la actividad que quieres realizar 1-Trekking 2-Tirolesa");
-}}
-actividades();
-
-const grupo = ["Eduardo", "Jose", "Natalia", "Ivana", "Vanina"];
-let nuevo = prompt("ingresa tu nombre para agregarte al grupo");
-if (grupo.push("")){ 
-alert(`agregado a la lista : ${grupo} y vos: ${nuevo}`);
+// Función para agregar tarjetas de actividades al contenedor
+function agregarTarjetas(container, actividades) {
+    for (const actividad of actividades) {
+        let contenedor = document.createElement("div");
+        contenedor.classList.add("card");
+        contenedor.innerHTML = `
+                <img src="${actividad.imagen}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${actividad.nombre}</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the
+                        bulk of the card's content.</p>
+                    <p>precio: $${actividad.precio}</p>
+                    <button class="btn btn-primary agregar" data-product-id="${actividad.id}">agregar</button>
+                </div>
+                `;
+        container.appendChild(contenedor);
+    }
 }
-function Itinerario(salida, dia, hora) {
-    this.salida = salida;
-    this.dia = dia;
-    this.hora = hora;
-}
-const trekking = new Itinerario("ingreso al complejo de cabañas", "viernes", "10am");
-const tirolesa = new Itinerario("ingreso al complejo de cabañas", "sabados", "11am");
 
-let solicitud = prompt("Ingresa 'trekking' o `tirolesa` para conocer el itinerario");
-if (solicitud === 'trekking') {
-    alert(`Salida: ${trekking.salida}, Día: ${trekking.dia}, Hora: ${trekking.hora}`);
-} else if (solicitud === `tirolesa`) {
-    alert(`Salida: ${tirolesa.salida}, Día: ${tirolesa.dia}, Hora: ${tirolesa.hora}`);
-}else
-alert("Solicitud no válida. Por favor, ingresa 'trekking'o`tirolesa` para conocer el itinerario.");
+// Seleccionar el contenedor de actividades
+const contenedorActividades = document.querySelector("#actividades");
+
+// Agregar tarjetas al contenedor de actividades
+agregarTarjetas(contenedorActividades, actividades);
+
+// Función para mostrar las actividades en "Mis actividades"
+function mostrarMisActividadesEnHTML() {
+    const contenedorMisActividades = document.querySelector(".container-carrito");
+
+    // Vacía el contenedor antes de agregar las actividades seleccionadas
+    contenedorMisActividades.innerHTML = '';
+
+    if (misActividades.length === 0) {
+        // Si el carrito está vacío, muestra un mensaje
+        contenedorMisActividades.innerHTML = '<p>No tienes actividades en el carrito.</p>';
+    } else {
+        // Si hay actividades en el carrito, muestra cada una
+        misActividades.forEach(actividad => {
+            const cardActividad = document.createElement("div");
+            cardActividad.classList.add("card-carrito");
+            cardActividad.innerHTML = `
+                    <img src="${actividad.imagen}" alt="">
+                    <div>
+                        <p>Actividad</p>
+                        <p>${actividad.nombre}</p>
+                    </div>
+                    <div>
+                        <p>Precio</p>
+                        <p>$${actividad.precio}</p>
+                    </div>
+                    <div>
+                        <p>Cantidad</p>
+                        <p>${actividad.cantidad}/10</p>
+                    </div>
+                    <button class="btn btn-danger eliminar-actividad" data-product-id="${actividad.id}">Eliminar</button>
+                    `;
+
+            contenedorMisActividades.appendChild(cardActividad);
+        });
+    }
+
+    // Función para eliminar una unidad de una actividad del carrito
+function eliminarUnidadDeActividad(actividad) {
+    // Buscar la actividad en el carrito por ID
+    const actividadEnCarrito = misActividades.find(item => item.id === actividad.id);
+
+    if (actividadEnCarrito) {
+        // Si la actividad está en el carrito y tiene una cantidad mayor a 1, disminuye la cantidad
+        if (actividadEnCarrito.cantidad > 1) {
+            actividadEnCarrito.cantidad -= 1;
+        } else {
+            // Si la cantidad es 1, elimina la actividad del carrito
+            const indice = misActividades.indexOf(actividadEnCarrito);
+            misActividades.splice(indice, 1);
+        }
+
+        // Actualizar el almacenamiento local con el carrito modificado
+        guardarMisActividadesEnLocalStorage();
+
+        // Volver a mostrar las actividades en "Mis actividades"
+        mostrarMisActividadesEnHTML();
+        actualizarTotalCarrito();
+    }
+}
+
+// Agregar un evento a los botones "eliminar-actividad"
+const eliminarBotones = document.querySelectorAll(".eliminar-actividad");
+eliminarBotones.forEach(button => {
+    button.addEventListener("click", (event) => {
+        const productoId = parseInt(event.target.getAttribute("data-product-id"));
+
+        // Buscar la actividad por ID en el array de actividades
+        const actividad = actividades.find(a => a.id === productoId);
+
+        if (actividad) {
+            // Eliminar una unidad de la actividad del carrito
+            eliminarUnidadDeActividad(actividad);
+        }
+    });
+});
+}
+
+// Llama a la función para mostrar los productos del carrito al cargar la página
+mostrarMisActividadesEnHTML();
+
+// Agregar un evento a los botones "agregar"
+const agregarButtons = document.querySelectorAll(".agregar");
+agregarButtons.forEach(button => {
+    button.addEventListener("click", (event) => {
+        const productoId = parseInt(event.target.getAttribute("data-product-id"));
+
+        // Buscar la actividad por ID en el array de actividades
+        const actividad = actividades.find(a => a.id === productoId);
+
+        if (actividad) {
+            // Agregar la actividad al carrito (en este caso, al array misActividades)
+            agregarActividadAlCarrito(actividad);
+
+            // Actualizar la vista del carrito
+            mostrarMisActividadesEnHTML();
+        }
+    });
+});
+
+// Función para agregar una actividad al carrito
+function agregarActividadAlCarrito(actividad) {
+    // Buscar la actividad en el carrito por ID
+    const actividadEnCarrito = misActividades.find(item => item.id === actividad.id);
+
+    if (actividadEnCarrito) {
+        // Si la actividad ya está en el carrito, aumenta la cantidad
+        if (actividadEnCarrito.cantidad >= 10) {
+            alert("No puedes agregar más de 10 unidades de esta actividad al carrito.");
+            return;
+        }
+        actividadEnCarrito.cantidad += 1;
+    } else {
+        // Si la actividad no está en el carrito, agrégala con cantidad 1
+        if (misActividades.length >= 10) {
+            alert("No puedes agregar más de 10 actividades al carrito.");
+            return;
+        }
+        misActividades.push({ ...actividad, cantidad: 1 });
+    }
+
+    // Guardar el carrito actualizado en el almacenamiento local
+    guardarMisActividadesEnLocalStorage();
+    actualizarTotalCarrito();
+}
+
+// Obtener elementos del DOM
+const totalCarrito = document.getElementById("totalCarrito");
+const totalCarritoValor = document.getElementById("totalCarritoValor");
+const comprarCarritoButton = document.getElementById("comprarCarrito");
+const vaciarCarritoButton = document.getElementById("vaciarCarrito");
+
+// Función para calcular el total del carrito
+function calcularTotalCarrito() {
+    let total = 0;
+    for (const actividad of misActividades) {
+        total += actividad.precio * actividad.cantidad;
+    }
+    return total;
+}
+
+// Función para actualizar el contenido del "Total Carrito"
+function actualizarTotalCarrito() {
+    const total = calcularTotalCarrito();
+    totalCarritoValor.textContent = `$${total}`;
+}
+
+// Mostrar el "Total Carrito" al cargar la página
+actualizarTotalCarrito();
+
+// Agregar un evento al botón "Comprar Carrito" (puedes implementar la lógica de compra aquí)
+comprarCarritoButton.addEventListener("click", () => {
+    // Implementa la lógica de compra aquí
+    alert("Implementa la lógica de compra aquí.");
+});
+
+// Agregar un evento al botón "Vaciar Carrito"
+vaciarCarritoButton.addEventListener("click", () => {
+    // Vaciar el carrito
+    misActividades = [];
+    // Actualizar el almacenamiento local
+    guardarMisActividadesEnLocalStorage();
+    // Actualizar el contenido del "Total Carrito"
+    actualizarTotalCarrito();
+    // Actualizar la vista de "Mis actividades"
+    mostrarMisActividadesEnHTML();
+});
