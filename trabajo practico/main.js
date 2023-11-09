@@ -139,6 +139,15 @@ const agregarButtons = document.querySelectorAll(".agregar");
 agregarButtons.forEach(button => {
     button.addEventListener("click", (event) => {
         const productoId = parseInt(event.target.getAttribute("data-product-id"));
+//animacion boton       
+        Swal.fire({
+            title: "GRACIAS por tu compra!",
+            text: "Te deseamos un dia lleno de aventura",
+            imageUrl: "./img/animacion.jpeg",
+            imageWidth: 450,
+            imageHeight: 250,
+            imageAlt: "Custom image",
+              });
 
         // Buscar la actividad por ID en el array de actividades
         const actividad = actividades.find(a => a.id === productoId);
@@ -204,9 +213,15 @@ function actualizarTotalCarrito() {
 actualizarTotalCarrito();
 
 // Agregar un evento al botón "Comprar Carrito" (puedes implementar la lógica de compra aquí)
-comprarCarritoButton.addEventListener("click", () => {
+
+comprarCarritoButton.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let inputs = e.target.children;
+    if (!inputs[0].value.includes("nombre")){
+        alert("ingresar sólo el nombre");
+    }
     // Implementa la lógica de compra aquí
-    alert("Implementa la lógica de compra aquí.");
+    
 });
 
 // Agregar un evento al botón "Vaciar Carrito"
@@ -220,3 +235,6 @@ vaciarCarritoButton.addEventListener("click", () => {
     // Actualizar la vista de "Mis actividades"
     mostrarMisActividadesEnHTML();
 });
+   
+  
+
