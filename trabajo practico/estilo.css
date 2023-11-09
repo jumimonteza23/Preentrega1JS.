@@ -486,6 +486,9 @@ main li {
 .container-btn :hover {
   background-color:  rgb(160, 177, 155);
 }
+.ocultar {
+  display: none;
+}
 
 
 
