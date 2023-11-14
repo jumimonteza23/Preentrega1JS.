@@ -1,35 +1,52 @@
+// aplicando fetch
 let actividades = [];
-fetch("trabajo practico JS/actividades.json")
-.then((response) => response.json())
-    .then((data) => {
-        // Este bloque de código se ejecutará cuando la respuesta JSON sea recibida
-        console.log(data); // Asegúrate de que los datos se impriman en la consola
-        // Puedes continuar con el resto de tu lógica aquí
-    })
-    .catch(error => console.log(error));
+const contenedorActividades = document.querySelector("#actividades");
+if (contenedorActividades) {
+    fetch("./actividades.json")
+        .then((response) => response.json())
+        .then((data) => {
+            actividades = data.actividades;
+            agregarTarjetas(contenedorActividades, actividades);
 
-// Array de actividade
+ // Agregar un evento a los botones "agregar"
+const agregarButtons = document.querySelectorAll(".agregar");
+agregarButtons.forEach(button => {
+    button.addEventListener("click", (event) => {
+        const productoId = parseInt(event.target.getAttribute("data-product-id"));
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: "actividad agregada"
+          });
 
-/*const actividades = [
-    {
-        id: 1,
-        nombre: "tirolesa",
-        precio: 5000,
-        imagen: "./img/tirolesa.jpg",
-    },
-    {
-        id: 2,
-        nombre: "trekking",
-        precio: 5000,
-        imagen: "./img/trekking.jpg",
-    },
-    {
-        id: 3,
-        nombre: "mountain bike",
-        precio: 5000,
-        imagen: "./img/m.bike.jpg",
-    },
-];*/
+    // Buscar la actividad por ID en el array de actividades
+        const actividad = actividades.find(a => a.id === productoId);
+
+        if (actividad) {
+    // Agregar la actividad al carrito (en este caso, al array misActividades)
+            agregarActividadAlCarrito(actividad);
+
+    // Actualizar la vista del carrito
+            mostrarMisActividadesEnHTML();
+        }
+    });
+});
+
+        })
+        .catch(error => console.log(error));
+} else {
+    console.error("No se encontró el contenedor de actividades.");
+}
 
 // Inicializar el carrito desde el almacenamiento local
 let misActividades = JSON.parse(localStorage.getItem('misActividades')) || [];
@@ -57,12 +74,6 @@ function agregarTarjetas(container, actividades) {
         container.appendChild(contenedor);
     }
 }
-
-// Seleccionar el contenedor de actividades
-const contenedorActividades = document.querySelector("#actividades");
-
-// Agregar tarjetas al contenedor de actividades
-agregarTarjetas(contenedorActividades, actividades);
 
 // Función para mostrar las actividades en "Mis actividades"
 function mostrarMisActividadesEnHTML() {
@@ -107,11 +118,11 @@ function eliminarUnidadDeActividad(actividad) {
     const actividadEnCarrito = misActividades.find(item => item.id === actividad.id);
 
     if (actividadEnCarrito) {
-        // Si la actividad está en el carrito y tiene una cantidad mayor a 1, disminuye la cantidad
+    // Si la actividad está en el carrito y tiene una cantidad mayor a 1, disminuye la cantidad
         if (actividadEnCarrito.cantidad > 1) {
             actividadEnCarrito.cantidad -= 1;
         } else {
-            // Si la cantidad es 1, elimina la actividad del carrito
+    // Si la cantidad es 1, elimina la actividad del carrito
             const indice = misActividades.indexOf(actividadEnCarrito);
             misActividades.splice(indice, 1);
         }
@@ -131,7 +142,7 @@ eliminarBotones.forEach(button => {
     button.addEventListener("click", (event) => {
         const productoId = parseInt(event.target.getAttribute("data-product-id"));
 
-        // Buscar la actividad por ID en el array de actividades
+    // Buscar la actividad por ID en el array de actividades
         const actividad = actividades.find(a => a.id === productoId);
 
         if (actividad) {
@@ -159,40 +170,6 @@ eliminarBotones.forEach(button => {
 
 // Llama a la función para mostrar los productos del carrito al cargar la página
 mostrarMisActividadesEnHTML();
-
-// Agregar un evento a los botones "agregar"
-const agregarButtons = document.querySelectorAll(".agregar");
-agregarButtons.forEach(button => {
-    button.addEventListener("click", (event) => {
-        const productoId = parseInt(event.target.getAttribute("data-product-id"));
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.onmouseenter = Swal.stopTimer;
-              toast.onmouseleave = Swal.resumeTimer;
-            }
-          });
-          Toast.fire({
-            icon: "success",
-            title: "actividad agregada"
-          });
-
-        // Buscar la actividad por ID en el array de actividades
-        const actividad = actividades.find(a => a.id === productoId);
-
-        if (actividad) {
-            // Agregar la actividad al carrito (en este caso, al array misActividades)
-            agregarActividadAlCarrito(actividad);
-
-            // Actualizar la vista del carrito
-            mostrarMisActividadesEnHTML();
-        }
-    });
-});
 
 // Función para agregar una actividad al carrito
 function agregarActividadAlCarrito(actividad) {
@@ -274,8 +251,8 @@ comprarCarritoButton.addEventListener("click", (e) => {
 // Agregar un evento al botón "Vaciar Carrito"
 vaciarCarritoButton.addEventListener("click", () => {
     Swal.fire({
-        title: "elinimar actividades",
-        text: "¿estas seguro de elinimar todas las actividades?",
+        title: "eliminar actividades",
+        text: "¿estas seguro de eliminar todas las actividades?",
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -285,7 +262,7 @@ vaciarCarritoButton.addEventListener("click", () => {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title: "Anulada!",
+            title: "Elimiada!",
             text: "has eliminado todas tus actividades",
             icon: "success"
 
@@ -298,9 +275,23 @@ vaciarCarritoButton.addEventListener("click", () => {
     // Actualizar la vista de "Mis actividades"
     mostrarMisActividadesEnHTML();}
       });
-    // Vaciar el carrito 
-    
+      
+      
 });
+
+const btnenviar = document.querySelector("#enviar");
+btnenviar.addEventListener("click", (event) => {
+    misActividades = [];
+    // Actualizar el almacenamiento local
+    guardarMisActividadesEnLocalStorage();
+    // Actualizar el contenido del "Total Carrito"
+    actualizarTotalCarrito();
+    // Actualizar la vista de "Mis actividades"
+    mostrarMisActividadesEnHTML(); 
+    formComprarCarrito.classList.add("ocultar");}
+      );
+    
+       
 
 
    
