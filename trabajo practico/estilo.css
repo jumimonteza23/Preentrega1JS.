@@ -480,8 +480,10 @@ main li {
 }
 .container-btn button {
   color: rgb(64, 122, 76) 226, 48;
-  background-color: rgb(251, 194, 136);
-  border-radius: 10px;
+  padding: 15px;
+  background-color: #d59460;
+  border: 3px solid rgb(157, 105, 8);
+  border-radius: 15px;
 }
 .container-btn :hover {
   background-color:  rgb(160, 177, 155);
@@ -489,6 +491,42 @@ main li {
 .ocultar {
   display: none;
 }
+.formulario{
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 15vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formulario input{
+  padding: 20px 25px;
+  border-radius: 25px;
+  margin-bottom: 15px;
+  background-color: #ebb67a;
+
+ 
+}
+.btn{
+  background-color: #ebb68b;
+  padding: 17px 25px;
+  border-radius: 25px;
+  border: 3px solid rgb(176, 84, 27);
+}
+form {
+padding:  5px 30px;
+box-shadow: 0 0 30px rgb(143, 110, 48);
+border-radius: 20px;
+text-align:  center;
+width: 300px;
+}
+.btn:hover {
+  background-color: #e65416;
+}
+
+  
+
+
 
 
 

@@ -1,0 +1,22 @@
+{
+    "actividades": [
+        {
+            "id": 1,
+            "nombre": "tirolesa",
+            "precio": 5000,
+            "imagen": "./img/tirolesa.jpg"
+        },
+        {
+            "id": 2,
+            "nombre": "trekking",
+            "precio": 5000,
+            "imagen": "./img/trekking.jpg"
+        },
+        {
+            "id": 3,
+            "nombre": "mountain bike",
+            "precio": 5000,
+            "imagen": "./img/m.bike.jpg"
+        }
+    ]
+}

@@ -1,5 +1,16 @@
+let actividades = [];
+fetch("trabajo practico JS/actividades.json")
+.then((response) => response.json())
+    .then((data) => {
+        // Este bloque de código se ejecutará cuando la respuesta JSON sea recibida
+        console.log(data); // Asegúrate de que los datos se impriman en la consola
+        // Puedes continuar con el resto de tu lógica aquí
+    })
+    .catch(error => console.log(error));
+
 // Array de actividade
-const actividades = [
+
+/*const actividades = [
     {
         id: 1,
         nombre: "tirolesa",
@@ -18,7 +29,7 @@ const actividades = [
         precio: 5000,
         imagen: "./img/m.bike.jpg",
     },
-];
+];*/
 
 // Inicializar el carrito desde el almacenamiento local
 let misActividades = JSON.parse(localStorage.getItem('misActividades')) || [];
@@ -274,7 +285,7 @@ vaciarCarritoButton.addEventListener("click", () => {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title: "Deleted!",
+            title: "Anulada!",
             text: "has eliminado todas tus actividades",
             icon: "success"
 
@@ -287,9 +298,11 @@ vaciarCarritoButton.addEventListener("click", () => {
     // Actualizar la vista de "Mis actividades"
     mostrarMisActividadesEnHTML();}
       });
-    // Vaciar el carrito
+    // Vaciar el carrito 
     
 });
+
+
    
   
 
